@@ -30,7 +30,7 @@
 
 # 代码 & 预览
 
-- [ :smiley_cat:  源代码](https://github.com/devsapp/start-repack-apk/tree/main/src)
+- [ :smiley_cat:  源代码](https://github.com/devsapp/repackAPK/tree/main/src)
 
 </codepre>
 
