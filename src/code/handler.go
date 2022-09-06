@@ -41,6 +41,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("fcContext=%v", fcCtx)
 	if err != nil {
 		handleError(w, fmt.Errorf("fail to NewFromContext due to  %v", err))
+		return
 	}
 	switch r.Method {
 	case "HEAD":
