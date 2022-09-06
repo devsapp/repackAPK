@@ -59,15 +59,23 @@ func repackLocal() {
 		return
 	}
 	defer resFile.Close()
-	if _, err := io.Copy(resFile, resp); err != nil {
+	n, err := io.Copy(resFile, resp)
+	if err != nil {
 		log.Printf("copy: %v", err)
 		return
 	}
+	log.Printf("copied %d bytes", n)
 
-	if _, err := io.Copy(resFile, f); err != nil {
+	if _, err := f.Seek(0, 0); err != nil {
+		log.Printf("seek error: %v", err)
+		return
+	}
+	n, err = io.Copy(resFile, f)
+	if err != nil {
 		log.Printf("copy: %v", err)
 		return
 	}
+	log.Printf("copied %d bytes", n)
 }
 
 func main() {
