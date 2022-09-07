@@ -36,11 +36,32 @@ type OSSConfig struct {
 	SecurityToken   string
 }
 
-// NewReader ...
-func NewReader(config OSSConfig, location string) (*Reader, error) {
+var mu sync.Mutex
+var ossClient *oss.Client
+
+func getOSSClient(config OSSConfig) (*oss.Client, error) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if ossClient != nil {
+		return ossClient, nil
+	}
+
 	client, err := oss.New(
 		config.Endpoint, config.AccessKeyID, config.AccessKeySecret,
 		oss.SecurityToken(config.SecurityToken))
+
+	if err != nil {
+		return nil, err
+	}
+	ossClient = client
+
+	return client, nil
+}
+
+// NewReader ...
+func NewReader(config OSSConfig, location string) (*Reader, error) {
+	client, err := getOSSClient(config)
 
 	if err != nil {
 		return nil, err
