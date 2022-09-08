@@ -33,6 +33,10 @@ func parseRange(r string) (int64, int64, error) {
 		return 0, 0, err
 	}
 
+	if sz := endPos + 1 - beginPos; sz <= 0 || sz > 50*1024*1024 {
+		return 0, 0, fmt.Errorf("invalid range: %s", r)
+	}
+
 	return beginPos, endPos + 1, nil
 }
 
@@ -41,6 +45,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("fcContext=%v", fcCtx)
 	if err != nil {
 		handleError(w, fmt.Errorf("fail to NewFromContext due to  %v", err))
+		return
 	}
 	switch r.Method {
 	case "HEAD":

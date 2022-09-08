@@ -20,7 +20,9 @@ const (
 	fcAccountID = "x-fc-account-id"
 	fcQualifier = "x-fc-qualifier"
 	fcVersionID = "x-fc-version-id"
+)
 
+var (
 	CertPEM_PATH       = "cert/test-cert.pem"
 	PrivateKeyPEM_PATH = "cert/test-priv.pem"
 	WORK_DIR_BASE      = "/mnt/auto"
