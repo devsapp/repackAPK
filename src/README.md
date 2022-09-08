@@ -63,29 +63,45 @@
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN019seP901UxWBt9D8h7_!!6000000002584-2-tps-2120-668.png)
 
-本应用主要部署后端的函数，部署成功后， 您会获取一个 url， 比如为 `http://get-apk.apk-repack.1986114430573743.cn-hangzhou.fc.devsapp.net`
+本应用主要部署后端的函数，部署成功后， 您会获取一个 访问域名的 url， 比如为 `https://get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
 
 之后登录 [CDN 控制台](https://cdn.console.aliyun.com/) 完成配置：
 
-#### 添加域名
-![](https://img.alicdn.com/imgextra/i3/O1CN01aDJ7ed1U2j50vyStH_!!6000000002460-2-tps-1291-942.png)
+### 添加域名
 
-#### 域名管理
-1. 根据控制台引导， 完成域名的 CNAME 解析
-![](https://img.alicdn.com/imgextra/i2/O1CN01iZLk411kJFDJZ9Pn8_!!6000000004662-2-tps-1535-229.png)
+比如您有一个名为 `functioncompute.com` 的域名, 如下图所示， 我添加了 `apk-cdn.functioncompute.com`,  源站的域名为前面应用部署的访问域名 url(*注意是 host，不用填写前面的 https://*), 比如本示例为 `get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
 
-2. 完成管理配置, 主要完成回源配置的域名和开启 Range 回源强制
-![](https://img.alicdn.com/imgextra/i2/O1CN01HDjf111JqE79AaKgQ_!!6000000001079-2-tps-1024-327.png)
+> 其中前缀 apk-cdn 可以随便， 由您这边自己想最后暴露出去的 url 决定
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01JKdUXF1VhJndHKVPs_!!6000000002684-2-tps-934-417.png)
+![](https://img.alicdn.com/imgextra/i2/O1CN01KX6FhL1sjp9I1US8M_!!6000000005803-2-tps-1372-840.png)
+
+
+### 域名管理
+
+#### 1. 根据控制台引导， 完成域名的 CNAME 解析
+
+![](https://img.alicdn.com/imgextra/i4/O1CN01tmlyC222ln0TTrFt1_!!6000000007161-2-tps-956-1372.png)
+
+![](https://img.alicdn.com/imgextra/i1/O1CN01htbiOc1DZNsDqDC9C_!!6000000000230-2-tps-2348-670.png)
+
+![](https://img.alicdn.com/imgextra/i4/O1CN01vKUcG21RGWBEd8eBT_!!6000000002084-2-tps-2586-244.png)
+
+#### 2. 完成管理配置, 主要完成回源配置的域名和开启 Range 回源强制
+
+![](https://img.alicdn.com/imgextra/i4/O1CN01d9cRsx23rZckwYqmF_!!6000000007309-2-tps-2646-716.png)
+
+> 域名应用部署成功后返回的访问域名 url 的 host, 比如本示例为 `get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
+
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01W8rPnG1R1rVDcK7TN_!!6000000002052-2-tps-2612-854.png)
 
 #### 使用浏览器断点下载指定渠道 apk 包
 
 比如:
 
-`http://xiliu.functioncompute.com/foo?src=fc-imm-demo/test-apk/qq.apk&cid=uc`
+`http://apk-cdn.functioncompute.com/foo?src=fc-imm-demo/test-apk/qq.apk&cid=uc`
 
-`http://xiliu.functioncompute.com/foo?src=fc-imm-demo/test-apk/qq.apk&cid=xiaomi`
+`http://apk-cdn.functioncompute.com/foo?src=fc-imm-demo/test-apk/qq.apk&cid=xiaomi`
 
 其中 
 - `xiliu.functioncompute.com` 表示 cdn 对外的域名
@@ -95,8 +111,6 @@
 **Tips**
 
 - 用户在自己程序中获取渠道信息， 只需要读取 apk 包中 `assets/dap.properties` 文件中的内容即可
-- 应用生成的 url， 比如上篇幅中介绍的 `http://get-apk.apk-repack.1986114430573743.cn-hangzhou.fc.devsapp.net` 为临时测试域名， 您可以切换成您自己的生产域名
-    > [配置自定义域名](https://help.aliyun.com/document_detail/90763.htm)
 
 - 换用自己的证书， 只需要换掉 target/cert 下面的文件即可：
     > jarsigner 将 .keystore 文件作为 RSA 密钥的来源，要将其转换为 golang 可识别的 .pem，我们需要以下几行：
@@ -114,6 +128,23 @@
     # cert pem
     $ openssl pkcs12 -in test.p12 -nokeys -out test-cert.pem
     ```
+# 本地调试
+
+1. 将测试证书放置在如下位置
+
+```bash
+CertPEM_PATH = "/tmp/cert/test-cert.pem"
+PrivateKeyPEM_PATH = "/tmp/cert/test-priv.pem"
+```
+
+2. 编译， 生成的二进制可执行文件名字为 repack
+
+3. Run Local
+
+```bash
+$ RUN_LOCAL=true OSS_ENDPOINT=http://oss-cn-qingdao.aliyuncs.com SOURCE_OBJECT=test/test_pack.apk CHANNEL_ID=xiaomi ACCESS_KEY_ID=xxx ACCESS_KEY_SECRET=yyy  ./repack
+```
+> 注意将相关 ENV 设置您自己的值即可
 
 # 打包原理
 对于一个原始的 apk 文件，将一个新文件添加到存档中，然后对 apk 重新签名获取新的 apk 文件。等价于以下命令相同的效果：
