@@ -63,7 +63,9 @@
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN019seP901UxWBt9D8h7_!!6000000002584-2-tps-2120-668.png)
 
-本应用主要部署后端的函数，部署成功后， 您会获取一个 访问域名的 url， 比如为 `https://get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
+## CDN 配置
+
+本应用部署后端函数，部署成功后， 您会获取一个 访问域名的 url， 比如为 `https://get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
 
 之后登录 [CDN 控制台](https://cdn.console.aliyun.com/) 完成配置：
 
@@ -128,7 +130,7 @@
     # cert pem
     $ openssl pkcs12 -in test.p12 -nokeys -out test-cert.pem
     ```
-# 本地调试
+## 本地调试
 
 1. 将测试证书放置在如下位置
 
@@ -146,7 +148,7 @@ $ RUN_LOCAL=true OSS_ENDPOINT=http://oss-cn-qingdao.aliyuncs.com SOURCE_OBJECT=t
 ```
 > 注意将相关 ENV 设置您自己的值即可
 
-# 打包原理
+## 打包原理
 对于一个原始的 apk 文件，将一个新文件添加到存档中，然后对 apk 重新签名获取新的 apk 文件。等价于以下命令相同的效果：
 
 ```bash
