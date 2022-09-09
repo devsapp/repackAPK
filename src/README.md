@@ -106,7 +106,7 @@
 `http://apk-cdn.functioncompute.com/foo?src=fc-imm-demo/test-apk/qq.apk&cid=xiaomi`
 
 其中 
-- `xiliu.functioncompute.com` 表示 cdn 对外的域名
+- `apk-cdn.functioncompute.com` 表示 cdn 对外的域名
 - `src=fc-imm-demo/test-apk/qq.apk` 表示处理的母包， 其中  fc-imm-demo 为 bucket(和函数在同一个region), test-apk/qq.apk 为 object
 - `cid=xiaomi` 表示渠道为 xiaomi, 这个可以自定义
 
