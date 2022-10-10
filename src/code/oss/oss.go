@@ -23,9 +23,12 @@ const (
 
 // Reader implements io.ReaderAt and reads from OSS object
 type Reader struct {
-	Bucket string
-	Object string
-	Client Store
+	Bucket       string
+	Object       string
+	Client       Store
+	totalSize    int64
+	buffer       []byte
+	bufferOffset int64
 }
 
 // OSSConfig ...
@@ -75,11 +78,17 @@ func NewReader(config OSSConfig, location string) (*Reader, error) {
 	bucket, object := bucketAndObject[0], bucketAndObject[1]
 	bucketClient, _ := client.Bucket(bucket)
 
-	return &Reader{
+	r := &Reader{
 		Bucket: bucket,
 		Object: object,
 		Client: NewStoreWithRetry(bucketClient),
-	}, nil
+	}
+	sz, err := r.getSize()
+	if err != nil {
+		return nil, err
+	}
+	r.totalSize = sz
+	return r, nil
 }
 
 // readAll keeps reading from r until it fills the buf
@@ -106,23 +115,46 @@ func readAll(r io.Reader, buf []byte) error {
 
 // ReadAt reads len(buf) bytes from OSS object at offset
 func (r *Reader) ReadAt(buf []byte, off int64) (int, error) {
+	log.Printf("read offset=%d, size=%d", off, len(buf))
+	if off >= r.bufferOffset &&
+		(off+int64(len(buf))) <= r.bufferOffset+int64(len(r.buffer)) {
+		startPos := off - r.bufferOffset
+		copy(buf, r.buffer[startPos:startPos+int64(len(buf))])
+		return len(buf), nil
+	}
+	// read 4MB from OSS
+	sz := int64(4 * 1024 * 1024)
+	if remain := r.totalSize - off; remain < sz {
+		sz = remain
+	}
+
+	log.Printf("read oss offset=%d, size=%d", off, sz)
 	resp, err := r.Client.GetObject(
-		r.Object, oss.Range(off, off+int64(len(buf))-1))
+		r.Object, oss.Range(off, off+sz-1))
 	if err != nil {
 		return 0, err
 	}
 	defer resp.Close()
 
-	err = readAll(resp, buf)
+	r.buffer = make([]byte, sz)
+	err = readAll(resp, r.buffer)
 	if err != nil {
+		r.buffer = nil
+		r.bufferOffset = 0
 		return 0, err
 	}
+	r.bufferOffset = off
+	copy(buf, r.buffer[0:len(buf)])
 
 	return len(buf), nil
 }
 
 // Size returns the object size
 func (r *Reader) Size() (int64, error) {
+	return r.totalSize, nil
+}
+
+func (r *Reader) getSize() (int64, error) {
 	resp, err := r.Client.GetObjectDetailedMeta(r.Object)
 	if err != nil {
 		return 0, err
