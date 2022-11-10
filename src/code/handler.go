@@ -77,6 +77,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			endPos = res.Offset + res.FooterSize
 		}
 		w.Header().Set("Accept-Ranges", "bytes")
+		w.Header().Set("Cache-Control", "max-age=604800") // tell CDN to cache 7 days
 		w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fcCtx.NewApkFileName))
 		w.Header().Set("Content-Type", "application/octet-stream")
 		w.Header().Set("Content-Range", fmt.Sprintf("bytes %d-%d/%d", beginPos, endPos-1, res.Offset+res.FooterSize))
