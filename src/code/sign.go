@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"crypto"
-	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha1"
 	"crypto/x509"
@@ -14,8 +13,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
+	"os/exec"
 	"time"
 
 	"github.com/mozilla-services/pkcs7"
@@ -34,47 +33,13 @@ func sha1Sum(msg []byte) string {
 
 func signSF(fcCtx *FCContext) ([]byte, error) {
 	sfFile := fmt.Sprintf("%s/%s.SF", fcCtx.WorkDir, fcCtx.SigFileName)
-	sfContent, err := ioutil.ReadFile(sfFile)
+	cmd := exec.Command("openssl", "smime", "-sign", "-binary", "-noattr", "-outform", "DER",
+		"-in", sfFile, "-inkey", PrivateKeyPEM_PATH, "-signer", CertPEM_PATH)
+	buf, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cmd error: %v, output: %s", err, string(buf))
 	}
-
-	// read private key from pem
-	buf, err := ioutil.ReadFile(PrivateKeyPEM_PATH)
-	if err != nil {
-		return nil, err
-	}
-
-	block, _ := pem.Decode(buf)
-	if block == nil {
-		return nil, fmt.Errorf("failed to decode pem")
-	}
-
-	privKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-	if err != nil {
-		return nil, err
-	}
-
-	buf, err = ioutil.ReadFile(CertPEM_PATH)
-	if err != nil {
-		return nil, err
-	}
-
-	block, _ = pem.Decode(buf)
-	if block == nil {
-		return nil, fmt.Errorf("failed to decode pem: %s", CertPEM_PATH)
-	}
-
-	cert, err := x509.ParseCertificate(block.Bytes)
-	if err != nil {
-		return nil, err
-	}
-
-	if os.Getenv("USE_OLD_SIGN") == "y" {
-		log.Printf("using old sign")
-		return signPKCS7(rand.Reader, privKey, sfContent)
-	}
-	return SignAndDetach(sfContent, cert, privKey)
+	return buf, nil
 }
 
 func SignAndDetach(content []byte, cert *x509.Certificate, privkey *rsa.PrivateKey) (signed []byte, err error) {

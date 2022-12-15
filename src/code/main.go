@@ -11,8 +11,8 @@ import (
 )
 
 func repackLocal() {
-	CertPEM_PATH = "/tmp/cert/test-cert.pem"
-	PrivateKeyPEM_PATH = "/tmp/cert/test-priv.pem"
+	CertPEM_PATH = "target/cert/test-cert.pem"
+	PrivateKeyPEM_PATH = "target/cert/test-priv.pem"
 	WORK_DIR_BASE = "/tmp"
 
 	fcCtx := &FCContext{
