@@ -1,5 +1,5 @@
 
-> 注：当前项目为 Serverless Devs 应用，由于应用中会存在需要初始化才可运行的变量（例如应用部署地区、函数名等等），所以**不推荐**直接 Clone 本仓库到本地进行部署或直接复制 s.yaml 使用，**强烈推荐**通过 `s init --project ${模版名称}` 的方法或应用中心进行初始化，详情可参考[部署 & 体验](#部署--体验) 。
+> 注：当前项目为 Serverless Devs 应用，由于应用中会存在需要初始化才可运行的变量（例如应用部署地区、函数名等等），所以**不推荐**直接 Clone 本仓库到本地进行部署或直接复制 s.yaml 使用，**强烈推荐**通过 `s init ${模版名称}` 的方法或应用中心进行初始化，详情可参考[部署 & 体验](#部署--体验) 。
 
 # start-repack-apk-v3 帮助文档
 <p align="center" class="flex justify-center">
@@ -34,33 +34,19 @@
 
 ## 前期准备
 
-使用该项目，您需要有开通以下服务：
+使用该项目，您需要有开通以下服务并拥有对应权限：
 
 <service>
 
 
 
-| 服务 |  备注  |
-| --- |  --- |
-| 函数计算 FC |  实时 apk 渠道分包函数需要部署到函数计算 |
-| 文件存储 NAS |  需要有 NAS 文件系统为函数执行环境提供持久化 |
-| 专有网络 VPC |  NAS 文件系统挂载点依赖 VPC |
+| 服务/业务 |  权限  | 相关文档 |
+| --- |  --- | --- |
+| 函数计算 |  AliyunFCFullAccess | [帮助文档](https://help.aliyun.com/product/2508973.html) [计费文档](https://help.aliyun.com/document_detail/2512928.html) |
+| 硬盘挂载 |  AliyunFCServerlessDevsRolePolicy | [帮助文档](https://help.aliyun.com/zh/nas) [计费文档](https://help.aliyun.com/zh/nas/product-overview/billing) |
+| 专有网络 |  AliyunFCServerlessDevsRolePolicy | [帮助文档](https://help.aliyun.com/zh/vpc) [计费文档](https://help.aliyun.com/zh/vpc/product-overview/billing) |
 
 </service>
-
-推荐您拥有以下的产品权限 / 策略：
-<auth>
-
-
-
-| 服务/业务 |  权限 |  备注  |
-| --- |  --- |   --- |
-| 函数计算 | AliyunFCFullAccess |  实时 apk 渠道分包函数需要部署到函数计算 |
-| 硬盘挂载 | AliyunNASFullAccess |  需要有 NAS 文件系统为函数执行环境提供持久化 |
-| 专有网络 | AliyunVPCFullAccess |  NAS 文件系统挂载点依赖 VPC |
-| 其它 | AliyunECSFullAccess |  函数计算访问 VPC 还需要一个安全组 |
-
-</auth>
 
 <remark>
 
@@ -86,30 +72,38 @@
     
 - 通过 [Serverless Devs Cli](https://www.serverless-devs.com/serverless-devs/install) 进行部署：
   - [安装 Serverless Devs Cli 开发者工具](https://www.serverless-devs.com/serverless-devs/install) ，并进行[授权信息配置](https://docs.serverless-devs.com/fc/config) ；
-  - 初始化项目：`s init --project start-repack-apk-v3 -d start-repack-apk-v3`
+  - 初始化项目：`s init start-repack-apk-v3 -d start-repack-apk-v3`
   - 进入项目，并进行项目部署：`cd start-repack-apk-v3 && s deploy -y`
    
 </deploy>
 
-## 应用详情
+## 案例介绍
 
 <appdetail id="flushContent">
 
-## Serverless 实现实时 apk 渠道分包
+基于本案例， 您可以快捷部署生成一个弹性高可用的 “Serverless 实现实时 apk 渠道分包“ 服务。
 
-游戏分发平台的游戏 APK 包需要根据实时请求中的的参数获取指定的渠道号，并将渠道号写入 APK 文件固定位置， 如果每天有大量且不同渠道的下载请求， 能**实时**让用户**断点下载**指定渠道的 apk 游戏包
 
-应用原理图如下：
+随着移动游戏市场的多元化，游戏开发商和发行商需针对不同渠道分发定制化的游戏版本，针对此类需求，该方案适用于大规模、多渠道的游戏分发场景，特别是在面临频繁且多变的下载请求时， 用户能够通过系统实时地获取并下载包含定制渠道号的游戏 APK 包，同时享受断点续传的下载体验，确保即使在连接不稳定的情况下也能顺利完成游戏的获取，该方案已被多家游戏公司采纳,。
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN019seP901UxWBt9D8h7_!!6000000002584-2-tps-2120-668.png)
 
-## CDN 配置
 
-本应用部署后端函数，部署成功后， 您会获取一个 访问域名的 url， 比如为 `https://get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
+如上图所示，游戏 APK 包需要根据实时请求中的的参数获取指定的渠道号，并将渠道号写入 APK 文件固定位置， 如果每天有大量且不同渠道的下载请求， 能**实时**让用户**断点下载**指定渠道的 apk 游戏包。
+
+</appdetail>
+
+## 使用流程
+
+<usedetail id="flushContent">
+
+### CDN 配置
+
+本应用部署成功后， 您会获取一个 访问域名的 url， 比如为 `https://get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
 
 之后登录 [CDN 控制台](https://cdn.console.aliyun.com/) 完成配置：
 
-### 添加域名
+#### 1. 添加域名
 
 比如您有一个名为 `functioncompute.com` 的域名, 如下图所示， 我添加了 `apk-cdn.functioncompute.com`, 源站的域名为前面应用部署的访问域名 url(_注意是 host，不用填写前面的 https://_), 比如本示例为 `get-apk-apk-repack-evbilghzjb.cn-hangzhou.fcapp.run`
 
@@ -117,9 +111,9 @@
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01KX6FhL1sjp9I1US8M_!!6000000005803-2-tps-1372-840.png)
 
-### 域名管理
+#### 2. 域名管理
 
-#### 1. 根据控制台引导， 完成域名的 CNAME 解析
+##### 2.1. 根据控制台引导， 完成域名的 CNAME 解析
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01tmlyC222ln0TTrFt1_!!6000000007161-2-tps-956-1372.png)
 
@@ -127,7 +121,7 @@
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01vKUcG21RGWBEd8eBT_!!6000000002084-2-tps-2586-244.png)
 
-#### 2. 完成管理配置, 主要完成回源配置的域名和开启 Range 回源强制
+##### 2.2. 完成管理配置, 主要完成回源配置的域名和开启 Range 回源强制
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01d9cRsx23rZckwYqmF_!!6000000007309-2-tps-2646-716.png)
 
@@ -135,7 +129,7 @@
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01W8rPnG1R1rVDcK7TN_!!6000000002052-2-tps-2612-854.png)
 
-#### 使用浏览器断点下载指定渠道 apk 包
+#### 3. 使用浏览器断点下载指定渠道 apk 包
 
 比如:
 
@@ -149,12 +143,13 @@
 - `src=fc-imm-demo/test-apk/qq.apk` 表示处理的母包， 其中 fc-imm-demo 为 bucket(和函数在同一个 region), test-apk/qq.apk 为 object
 - `cid=xiaomi` 表示渠道为 xiaomi, 这个可以自定义
 
-**Tips**
+### Tips
 
 - 用户在自己程序中获取渠道信息， 只需要读取 apk 包中 `assets/dap.properties` 文件中的内容即可
 
 - 换用自己的证书， 只需要换掉 target/cert 下面的文件即可：
   > jarsigner 将 .keystore 文件作为 RSA 密钥的来源，要将其转换为 golang 可识别的 .pem，我们需要以下几行：
+
   ```bash
   # key store
   $ keytool -genkey -keystore test.keystore  -alias test -keyalg RSA -validity 10000
@@ -170,7 +165,9 @@
   $ openssl pkcs12 -in test.p12 -nokeys -out test-cert.pem
   ```
 
-## 本地调试
+### 二次开发
+
+#### 本地调试
 
 1. 将测试证书放置在如下位置
 
@@ -189,7 +186,7 @@ $ RUN_LOCAL=true OSS_ENDPOINT=http://oss-cn-qingdao.aliyuncs.com SOURCE_OBJECT=t
 
 > 注意将相关 ENV 设置您自己的值即可
 
-## 打包原理
+####  打包原理
 
 对于一个原始的 apk 文件，将一个新文件添加到存档中，然后对 apk 重新签名获取新的 apk 文件。等价于以下命令相同的效果：
 
@@ -217,12 +214,12 @@ $ jarsigner -keystore test.keystore -signedjar new.apk new-unsigned.apk 'test'
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01ARFir41xyXwDIpAng_!!6000000006512-2-tps-711-463.png)
 
-</appdetail>
-
-## 使用文档
-
-<usedetail id="flushContent">
 </usedetail>
+
+## 注意事项
+
+<matters id="flushContent">
+</matters>
 
 
 <devgroup>

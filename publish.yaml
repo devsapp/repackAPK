@@ -1,7 +1,7 @@
 Edition: 3.0.0
 Type: Project
 Name: start-repack-apk-v3
-Version: 0.0.1
+Version: 0.0.2
 Provider:
   - 阿里云
 Description: 基于 CDN + Custom 运行时实现 apk 实时打渠道包
@@ -20,13 +20,10 @@ Service:
       - AliyunFCFullAccess
   硬盘挂载:
     Authorities:
-      - AliyunNASFullAccess
+      - AliyunFCServerlessDevsRolePolicy
   专有网络:
     Authorities:
-      - AliyunVPCFullAccess
-  其它:
-    Authorities:
-      - AliyunECSFullAccess
+      - AliyunFCServerlessDevsRolePolicy
 
 Parameters:
   type: object
