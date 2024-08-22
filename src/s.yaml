@@ -19,7 +19,7 @@ vars:
   region: '{{ region }}'
 
 resources:
-  helloworld:
+  doRepackAPK:
     component: fc3
     actions:
       pre-deploy:
