@@ -38,6 +38,7 @@ resources:
         port: 80
       functionName: '{{ functionName }}'
       code: ./code/target
+      logConfig: auto
       nasConfig: auto
       triggers:
         - qualifier: LATEST
