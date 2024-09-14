@@ -30,7 +30,9 @@ resources:
       description: get repack apk file
       runtime: custom
       handler: main
-      memorySize: 512
+      cpu: 1
+      memorySize: 1024
+      diskSize: 512
       timeout: 60
       customRuntimeConfig:
         command:
