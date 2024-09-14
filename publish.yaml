@@ -1,7 +1,7 @@
 Edition: 3.0.0
 Type: Project
-Name: start-repack-apk-dipper
-Version: 0.0.2
+Name: start-repack-apk-cap
+Version: 0.0.1
 Provider:
   - 阿里云
 Description: 基于 CDN + Custom 运行时实现 apk 实时打渠道包
@@ -24,7 +24,9 @@ Service:
   专有网络:
     Authorities:
       - AliyunFCServerlessDevsRolePolicy
-
+  日志服务: 
+    Authorities: 
+      - AliyunFCServerlessDevsRolePolicy
 Parameters:
   type: object
   additionalProperties: false # 不允许增加其他属性
