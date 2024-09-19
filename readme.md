@@ -5,7 +5,7 @@
 
 <description>
 
-基于 CDN + Custom 运行时实现 apk 实时打渠道包
+基于本案例，您可以快捷部署一个弹性高可用的“Serverless实现实时 APK 渠道分包”服务。该方案适用于大规模、多渠道的游戏分发场景，特别是在面临频繁且多变的下载请求时，能够通过系统实时获取并下载包含定制渠道号的游戏 APK 包，确保即使在连接不稳定的情况下也能顺利完成游戏的获取。
 
 </description>
 
@@ -187,7 +187,6 @@ $ jarsigner -keystore test.keystore -signedjar new.apk new-unsigned.apk 'test'
 **方案原理图**
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01ARFir41xyXwDIpAng_!!6000000006512-2-tps-711-463.png)
-
 
 </usedetail>
 
