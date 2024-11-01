@@ -1,7 +1,7 @@
 Edition: 3.0.0
 Type: Project
 Name: start-repack-apk-cap
-Version: 0.0.2
+Version: 0.0.3
 Provider:
   - 阿里云
 Description: 基于本案例，您可以快捷部署一个弹性高可用的“Serverless实现实时 APK 渠道分包”服务。该方案适用于大规模、多渠道的游戏分发场景，特别是在面临频繁且多变的下载请求时，能够通过系统实时获取并下载包含定制渠道号的游戏 APK 包，确保即使在连接不稳定的情况下也能顺利完成游戏的获取。
