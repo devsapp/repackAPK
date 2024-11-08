@@ -5,9 +5,3 @@ doRepackAPK:
     steps:
       - run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o target/repack
         path: ./code
-  defaultBuilder:
-    languages:
-      - go1.8
-    steps:
-      - run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o target/repack
-        path: ./code
