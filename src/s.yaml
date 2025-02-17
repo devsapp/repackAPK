@@ -34,6 +34,7 @@ resources:
       memorySize: 1024
       diskSize: 512
       timeout: 60
+      instanceConcurrency: 1
       customRuntimeConfig:
         command:
           - /code/repack
@@ -41,6 +42,7 @@ resources:
       functionName: '{{ functionName }}'
       code: ./code/target
       logConfig: auto
+      vpcConfig: auto
       nasConfig: auto
       triggers:
         - qualifier: LATEST
