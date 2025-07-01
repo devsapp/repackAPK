@@ -103,6 +103,10 @@
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01W8rPnG1R1rVDcK7TN_!!6000000002052-2-tps-2612-854.png)
 
+如果没有强制回源了，参考如下截图
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01uYP7qO1ehcuia7PCo_!!6000000003903-2-tps-1480-462.png)
+
 #### 3. 使用浏览器断点下载指定渠道 apk 包
 
 比如:

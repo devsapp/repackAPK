@@ -44,6 +44,7 @@ resources:
       logConfig: auto
       vpcConfig: auto
       nasConfig: auto
+      role: '{{ roleArn }}'
       triggers:
         - qualifier: LATEST
           triggerName: defaultTrigger
