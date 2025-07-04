@@ -10,7 +10,7 @@
 </description>
 
 
-## 前期准备
+## 资源准备
 
 使用该项目，您需要有开通以下服务并拥有对应权限：
 
@@ -43,7 +43,7 @@
 
 <appcenter>
    
-- :fire: 通过 [云原生应用开发平台 CAP](https://devs.console.aliyun.com/applications/create?template=start-repack-apk-cap) ，[![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://devs.console.aliyun.com/applications/create?template=start-repack-apk-cap) 该应用。
+- :fire: 通过 [云原生应用开发平台 CAP](https://cap.console.aliyun.com/template-detail?template=start-repack-apk-cap) ，[![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://cap.console.aliyun.com/template-detail?template=start-repack-apk-cap) 该应用。
    
 </appcenter>
 <deploy>
@@ -66,6 +66,12 @@
 如上图所示，游戏 APK 包需要根据实时请求中的的参数获取指定的渠道号，并将渠道号写入 APK 文件固定位置， 如果每天有大量且不同渠道的下载请求， 能**实时**让用户**断点下载**指定渠道的 apk 游戏包。
 
 </appdetail>
+
+
+
+
+
+
 
 ## 使用流程
 
@@ -194,7 +200,13 @@ $ jarsigner -keystore test.keystore -signedjar new.apk new-unsigned.apk 'test'
 
 </usedetail>
 
-## 注意事项
+## 二次开发指南
 
-<matters id="flushContent">
-</matters>
+<development id="flushContent">
+</development>
+
+
+
+
+
+
