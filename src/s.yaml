@@ -14,9 +14,9 @@
 
 edition: 3.0.0
 name: hello-world-app
-access: '{{ access }}'
+access: "{{ access }}"
 vars:
-  region: '{{ region }}'
+  region: "{{ region }}"
 
 resources:
   helloworld:
@@ -36,9 +36,12 @@ resources:
         command:
           - /code/repack
         port: 80
-      functionName: '{{ functionName }}'
+      functionName: "{{ functionName }}"
       code: ./code/target
+      logConfig: auto
+      vpcConfig: auto
       nasConfig: auto
+      role: "{{ roleArn }}"
       triggers:
         - qualifier: LATEST
           triggerName: defaultTrigger
